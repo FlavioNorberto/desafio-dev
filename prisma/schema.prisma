@@ -33,7 +33,7 @@ model Planta {
   id            Int          @id @default(autoincrement())
   nome          String
   especie       String
-  preco         Int          // Guardado em centavos para evitar erros de decimais
+  preco         Int         
   estoque       Int
   luminosidade  Luminosidade
   petFriendly   Boolean

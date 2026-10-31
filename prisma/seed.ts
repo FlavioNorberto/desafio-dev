@@ -5,10 +5,6 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Semeando o banco de dados...');
 
-  // O "upsert" tenta criar a planta; se já existir uma planta com esse documento/id (no caso, estamos recriando limpo), ele atualiza. 
-  // Mas como a tabela é autoincrement, vamos usar createMany para injetar os dados de teste de uma vez.
-  
-  // Limpa a tabela antes de popular (opcional, mas bom para testes)
   await prisma.planta.deleteMany();
 
   await prisma.planta.createMany({

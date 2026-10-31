@@ -1,18 +1,16 @@
 import { Prisma, Luminosidade } from "@prisma/client";
-import prisma from "../database"; // Importa a conexão com o banco de dados
+import prisma from "../database";
 
 export const createPlanta = async (data: Prisma.PlantaCreateInput) => {
   return prisma.planta.create({ data });
 };
 
-// Modifique a função findAllPlantas para aceitar os novos filtros
 export const findAllPlantas = async (
   luminosidade?: Luminosidade, 
   petFriendly?: boolean,
-  nome?: string, // Bónus: pesquisa
-  ordem?: string // Bónus: ordenação
+  nome?: string,
+  ordem?: string
 ) => {
-  // Lógica da ordenação
   let orderBy: any = undefined;
   if (ordem === "preco") orderBy = { preco: "asc" };
   else if (ordem === "nome") orderBy = { nome: "asc" };
@@ -21,14 +19,12 @@ export const findAllPlantas = async (
     where: {
       luminosidade,
       petFriendly,
-      // Bónus: O "contains" faz a pesquisa parcial e o "mode: insensitive" ignora maiúsculas/minúsculas
       nome: nome ? { contains: nome, mode: "insensitive" } : undefined 
     },
-    orderBy, // Aplica a ordenação, se existir
+    orderBy,
   });
 };
 
-// Adicione esta nova função para a rota de esgotadas
 export const findPlantasEsgotadas = async () => {
   return prisma.planta.findMany({
     where: { estoque: 0 },
@@ -54,7 +50,6 @@ export const deletePlanta = async (id: number) => {
   });
 };
 
-// Busca apenas o preço e o estoque de todas as plantas para calcular o valor total na rota de estoque
 export const findPlantasParaValorTotal = async () => {
   return prisma.planta.findMany({
     select: {

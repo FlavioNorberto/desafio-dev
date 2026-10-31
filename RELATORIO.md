@@ -1,0 +1,23 @@
+1. O que foi feito?
+    
+    Implementei o CRUD completo da entidade `Planta` seguindo todas as regras de negócio exigidas pelo documento PDF do desafio. Foram desenvolvidas as rotas de criação, leitura, atualização, deleção, venda e cálculo de valor total do estoque. Além dos requisitos obrigatórios, implementei bônus como: pesquisa por nome case-insensitive, para não haver diferença entre letras maiúsculas e minúsculas, ordenação por preço e nome, rota específica de plantas esgotadas e o script de seed para popular o banco automaticamente.
+    
+2. Como foi feito?
+    
+    Iniciei o desafio fazendo uma leitura e tentando entender o desafio, que, dentre todos,  foi o que achei mais desafiador. Fiz a clonagem do repositório base para o meu github e, depois, baixando ele para o meu computador. Utilizei o VSCode e Thunder Client. Fui tentando seguir o passo a passo do PDF do desafio. Subi o banco de dados PostgreSQL via **Docker,** criei o enum Luminosidade e o model Planta no arquivo schema.prisma, daí sincronizei o banco de dados rodando as *migrations*. Fui então para a criação do PlantaController.ts, tendo cuidado com os detalhes expostos no documento do desafio,  usando verificações estritas como `typeof` e validação contra `undefined` (para evitar o bug do `!estoque` em plantas com estoque zero). Para os filtros de busca combinados, centralizei tudo em uma única consulta no repositório, deixando o Prisma ignorar dinamicamente os parâmetros não enviados (undefined). Durante todo o processo, utilizei o **Thunder Client** para testar rigorosamente o envio dos JSONs e garantir que os códigos de status HTTP (200, 201, 400, 404, 500) estavam sendo retornados corretamente nas situações de sucesso e erro. Por fim, criei o script de *seed* (`seed.ts`) para automatizar a injeção de dados no banco, facilitando a avaliação do projeto. Tentei seguir a arquitetura que o projeto já tinha e me baseando no documento PDF do desafio.
+    
+3. Dificuldades
+    
+    Minha principal dificuldade inicial foi a curva de aprendizado com a stack do projeto. Como este foi meu primeiro contato mais profundo com o ecossistema web moderno (TypeScript, Node.js, Prisma e orquestração com Docker), precisei dedicar um tempo para compreender a arquitetura de uma API e o fluxo de dados de um CRUD. Entender o papel de cada ferramenta, desde o banco de dados até as requisições HTTP, gerou alguns erros e desafios ao longo do percurso. No entanto, o desafio foi extremamente enriquecedor e saio dele com uma visão muito mais sólida de como essas tecnologias se integram no back-end.
+    
+    Enfrentei alguns desafios com o ambiente e infraestrutura:
+    
+    - Docker no Windows: Tive problemas na instalação pois precisava do WSL ativado, mas resolvi via PowerShell.
+    - Sincronia do Docker: Logo após criar o model e gerar a migration, tomei um erro 500 no `POST`. Entendi que precisava rodar o `docker compose up -d --build` novamente para o container ler o novo `schema.prisma`.
+    - JSON Syntax: Durante os testes de erro 400, recebi retornos em HTML do Express. Descobri que era um erro na estrutura do meu JSON de teste (uma vírgula sobrando).
+    - Seed no Windows: O comando do Prisma não encontrava o banco `treinamento-crud-db`. Resolvi temporariamente alterando o `DATABASE_HOST` no `.env` para `localhost` apenas durante a execução do script. Também resolvi um conflito de tipagem global no arquivo do seed (`process.exit`) usando a flag `@ts-ignore`.
+    
+4. Uso de Inteligência Artificial
+    
+    A IA foi uma ferramenta importantíssima na resolução desse desafio. Eu usei a IA para entender arquitetura base do projeto (como o Prisma se comunicava com o Controller) e para me ajudar a debugar problemas do ambiente local, como o erro inicial de instalação do Docker, a falha de sintaxe no envio do JSON pelo Thunder Client e o direcionamento de portas na hora de rodar o Script de Seed. Isso foi essencial para agilizar a correção de erros. 
+    Tive o cuidado redobrado de não utilizar a IA como um gerador de código cego, assumindo a responsabilidade de revisar e avaliar cada linha gerada. Um exemplo prático disso ocorreu na estruturação das rotas: a IA sugeriu uma implementação usando nomenclaturas genéricas (`router` e importações padrão). Ao analisar os arquivos originais e o código do CITi, notei que o projeto já exigia um padrão específico (usando `routes`, o alias `@controllers` e nomes de funções padronizados). Recusei a cópia da sugestão e adaptei a lógica para respeitar a consistência e o padrão arquitetural fornecido no repositório base.

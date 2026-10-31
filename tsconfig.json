@@ -13,7 +13,6 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "baseUrl": "./",
-    "ignoreDeprecations": "6.0",
     "paths": {
       "@controllers/*": ["./src/controllers/*"],
       "@repositories/*": ["./src/repositories/*"],
